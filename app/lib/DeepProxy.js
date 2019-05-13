@@ -1,3 +1,5 @@
+import Observable from './Observable.js';
+
 export function create(target, handler) {
     const preproxy = new WeakMap();
 
@@ -7,8 +9,14 @@ export function create(target, handler) {
             	if(value instanceof Promise){
 					value.then(resolved => {
 						target[key] = resolved;
+                        handler.set(target, [...path, key], resolved, receiver);
 					});
-				}else {
+				}else if(value instanceof Observable){
+                    value.subscribe({next(resolved){
+                        target[key] = resolved;
+                        handler.set(target, [...path, key], resolved, receiver);
+                    }})
+                }else {
 					if(typeof value === 'object') {
                     	value = proxify(value, [...path, key]);
                 	}
@@ -31,11 +39,6 @@ export function create(target, handler) {
                     return deleted;
                 }
                 return false;
-            },
-
-            get(target, key) {
-            	unproxy(target, key);
-            	return target[key];
             }
         }
     }
@@ -51,7 +54,6 @@ export function create(target, handler) {
                 unproxy(obj[key], k);
             }
         }
-
     }
 
     function proxify(obj, path) {
