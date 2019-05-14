@@ -10,9 +10,14 @@
   "author": "xhesi balla",
   "license": "ISC",
   "dependencies": {
-    "mustache": "^3.0.1"
+    "bootstrap": "^4.3.1",
+    "feather-icons": "^4.21.0",
+    "jquery": "^3.4.1",
+    "mustache": "^3.0.1",
+    "popper.js": "^1.15.0"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.3"
+    "parcel-bundler": "^1.12.3",
+    "sass": "^1.20.1"
   }
 }
