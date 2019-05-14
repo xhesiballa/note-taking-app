@@ -26,9 +26,12 @@ export default class Component{
 			this.selector = document.getElementsByTagName(this.selector)[0];
 		}
 		this.selector.innerHTML = Mustache.render(this.template, model);
+		this.initialiseListeners();
 	}
 
 	set(obj, prop, value){
 		this.render();
 	}
+
+	initialiseListeners(){}
 }

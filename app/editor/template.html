@@ -1,0 +1,19 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <div class="col-sm-10">
+    	<h1 class="h2">{{title}}</h1>
+    </div>
+    <div lass="col-sm-2">
+    	{{#edit}}
+    	<button id="saveButton">Save</button>
+    	{{/edit}}
+    	{{^edit}}
+    	<button id="editButton">Edit</button>
+    	{{/edit}}
+    </div>
+</div>	
+{{#edit}}
+	<div id="editor"></div>
+{{/edit}}
+{{^edit}}
+	<div id="html"></div>
+{{/edit}}

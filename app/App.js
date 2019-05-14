@@ -4,7 +4,7 @@ import template from './template.html';
 const config = {
 	selector: 'main-component',
 	template: template, 
-	components: [import('./header/index.js'), import('./sidebar')]
+	components: [import('./header'), import('./sidebar'), import('./editor')]
 };
 
 export default class App extends Component {
