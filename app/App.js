@@ -10,10 +10,13 @@ const config = {
 export default class App extends Component {
 	constructor(){
 		super();
-		this.model.message = 'Main Component';
 	}
 
 	getConfig(){
 		return config;
+	}
+
+	init(){
+		this.selectedId.subscribe({next: (val)=>{this.documentId = val;}});
 	}
 }
