@@ -1,5 +1,8 @@
 import Mustache from 'mustache/mustache.js';
 import * as DeepProxy from './DeepProxy.js';
+import Input from './Input.js';
+import Observable from './Observable.js';
+
 
 export default class Component{
 	constructor() {
@@ -9,13 +12,36 @@ export default class Component{
 		this[symbol] = {}
 		this.model = DeepProxy.create(this[symbol], this);
 		this.render();
-		this.initialiseSubComponents();
+		if(this.components){
+			this.initialiseSubComponents();
+			Promise.all(this.components).then(() => {
+				this.init();
+			});
+		}
 	}
 
 	initialiseSubComponents(){
 		if(this.components){
 			this.components.forEach((promise) => {
-				promise.then(module => new module.default());
+				promise.then(module => {
+					let child = new module.default();
+					let inputs = child.getConfig().inputs;
+					if(inputs){
+						inputs.forEach(key => {
+							let observable = new Observable(watcher(this, key));
+							child[key] = observable;
+						});
+					}
+					child.init();
+
+					let outputs = child.getConfig().outputs;
+					if(outputs){
+						outputs.forEach(key => {
+							let observable = new Observable(watcher(child, key));
+							this[key] = observable;
+						});
+					}
+				});
 			});
 		}
 	}
@@ -34,4 +60,21 @@ export default class Component{
 	}
 
 	initialiseListeners(){}
+
+	init(){};
+}
+
+function watcher(target, key){
+	let subscribers = [];
+	Object.defineProperty(target, key, { set(newVal){
+			subscribers.forEach(s => s.next(newVal));
+		}});
+	return (subscriber) => {
+		subscribers.push(subscriber);
+		return {
+			unsubscribe: () => {
+				subscribers = subscribers.filter(s => s!=subscriber);
+			}
+		}
+	}
 }
