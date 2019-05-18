@@ -7,8 +7,9 @@ import './main.scss';
 const config = {
 	selector: 'sidebar-component',
 	template: template, 
-	outputs: ['selectedId']
-};
+	outputs: ['selectedId'],
+	inputs: ['_newTitle']
+}
 
 export default class SidebarComponent extends Component{
 	constructor(){
@@ -18,6 +19,12 @@ export default class SidebarComponent extends Component{
 
 	getConfig(){
 		return config;
+	}
+
+	init(){
+		this._newTitle.subscribe({next: (val) => {
+			this.model.documents = this.loadDocuments();
+		}});
 	}
 
 	initialiseListeners(){

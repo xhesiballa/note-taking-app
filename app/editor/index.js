@@ -13,6 +13,7 @@ const config = {
 	inputs: ['documentId'],
 	selector: 'editor-component',
 	template: template, 
+	outputs: ['newTitle']
 };
 
 // window.katex = katex;
@@ -76,6 +77,7 @@ export default class Editor extends Component {
 		});
 		this.model.edit = false;
 		this.model.title = newTitle;
+		this.newTitle = newTitle;
 		$("#html").html(html);
 	}
 

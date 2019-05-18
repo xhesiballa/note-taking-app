@@ -18,5 +18,6 @@ export default class App extends Component {
 
 	init(){
 		this.selectedId.subscribe({next: (val)=>{this.documentId = val;}});
+		this.newTitle.subscribe({next: (val)=>{this._newTitle = val}});
 	}
 }
