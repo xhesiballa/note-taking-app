@@ -68,6 +68,7 @@ function watcher(target, key){
 	let subscribers = [];
 	Object.defineProperty(target, key, { set(newVal){
 			subscribers.forEach(s => s.next(newVal));
+			// this[key] = newVal;
 		}});
 	return (subscriber) => {
 		subscribers.push(subscriber);
