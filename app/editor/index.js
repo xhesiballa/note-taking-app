@@ -65,15 +65,17 @@ export default class Editor extends Component {
 	}
 
 	save(){
-		this.model.edit = false;
-		this.deltas = this.quill.getContents().ops;
-		let converter = new QuillDeltaToHtmlConverter(this.deltas, {inlineStyles: true});
+		let newTitle = $("#titleTextArea").val();
+		let deltas = this.quill.getContents().ops;
+		let converter = new QuillDeltaToHtmlConverter(deltas, {inlineStyles: true});
 		let html = converter.convert(); 
 		this.saveDocument({
 			id: this.model.documentId,
-			title: this.model.title,
-			content: this.deltas
+			title: newTitle,
+			content: deltas
 		});
+		this.model.edit = false;
+		this.model.title = newTitle;
 		$("#html").html(html);
 	}
 
@@ -105,6 +107,7 @@ export default class Editor extends Component {
 		let doc = docArray.find(d => d.id === newDoc.id);
 		if(doc){
 			doc.content = newDoc.content;
+			doc.title = newDoc.title;
 		}else{
 			docArray.push(newDoc);
 		}
